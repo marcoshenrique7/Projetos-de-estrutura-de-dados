@@ -1,0 +1,76 @@
+# TrabalhoEstrutura2
+
+# Trabalho Prático Alocação Dinâmica
+Equipe: Andreas Gunther, Davi Carvalho e Marcos Henrique.
+
+Desenvolver, em equipes, as atividades postadas no classroom em C que utilize alocação dinâmica de forma correta e explícita, aplicando os conceitos vistos em sala.
+
+Esse trabalho envolve a implementação dos conceitos de alocação dinâmica em que possuimos o malloc, calloc, realloc e o free, cada um desempenhando um papel fundamental em cada parte do código:
+Malloc: Inicializa a memória com o tamanho decidido e com valores aleatórios.
+Calloc: inicializa a memória com 0's.
+Realloc: Tem a capacidade de mudar o tamanho da memória que já tinha sido determinada.
+Free: Libera o espaço da memória utlizado.
+
+## Estrutura dos arquivos
+
+* **q1-aloc.c** → Exercício 1 de alocação dinâmica.
+* **q2-aloc.c** → Exercício 2 de alocação dinâmica.
+* **q1_parte2.c** → Exercício 1 da parte 2 de alocação dinâmica.
+* **q2_parte2.c** → Exercício 2 da parte 2 de alocação dinâmica.
+* **q3parte2.c** → Exercício 3 da parte 2 de alocação dinâmica.
+
+Cada arquivo é independente e contém:
+
+* Entrada de dados pelo usuário.
+* Uso de ponteiros e malloc/calloc/realloc.
+* Processamento dos dados (ex.: armazenar, manipular ou calcular valores).
+* Liberação da memória com free().
+
+## Como compilar e executar
+
+No terminal, utilize o gcc para compilar e executar cada programa:
+
+gcc q1-aloc.c -o q1
+
+./q1
+
+gcc q2-aloc.c -o q2
+
+./q2
+
+gcc q1_parte2.c -o q1p2
+
+./q1p2
+
+gcc q2_parte2.c -o q2p2
+
+./q2p2
+
+gcc q3_parte2.c -o q3p2
+
+./q3p2
+
+
+
+## Prints dos códigos em execução
+
+* **q1-aloc.c**
+
+<img width="1102" height="669" alt="Screenshot from 2025-09-22 21-49-09" src="https://github.com/user-attachments/assets/6f7a8c1e-d80b-42fa-aae9-9ada0b77ab19" />
+
+* **q2-aloc.c**
+  
+<img width="1165" height="777" alt="Screenshot from 2025-09-22 21-47-14" src="https://github.com/user-attachments/assets/8a2c98a6-be69-4336-a9a6-538eb97e19f3" />
+
+* **q1_parte2.c**
+  
+<img width="721" height="731" alt="q1p2" src="https://github.com/user-attachments/assets/152ce2b5-109b-478c-896f-5f53dfc40205" />
+
+* **q2_parte2.c**
+  
+<img width="843" height="747" alt="q2p2" src="https://github.com/user-attachments/assets/4af6ef74-4cca-4f68-ab6f-dd43084c7bc4" />
+
+* **q3_parte2.c**
+  
+<img width="1051" height="769" alt="q3p2" src="https://github.com/user-attachments/assets/0b899a2d-faff-48ea-90f6-0604bb38090d" />
+
