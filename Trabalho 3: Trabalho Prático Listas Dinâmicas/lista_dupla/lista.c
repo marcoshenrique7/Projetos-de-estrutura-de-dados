@@ -1,0 +1,243 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>   // para sleep()
+#include <string.h>
+#include "lista.h"
+
+void inserir_inicio(struct Musica **playlist){
+    struct Musica *novo = malloc(sizeof(struct Musica));
+    if(novo == NULL){
+        printf("Erro de alocação!\n");
+        printf("Pressione Enter para continuar\n");
+        getchar(); getchar();
+        return;
+    }
+    printf("Digite o nome da música: \n");
+    getchar(); //limpa o buffer, retirando o \n do enter
+    fgets(novo->nome, 100, stdin); //fgets faz a leitura da string e stdin é a entrada padrão que nesse caso é o teclado
+    novo->nome[strcspn(novo->nome, "\n")] = '\0'; //strcspn encontra o \n(enter do usuário) no cod e substitui por \0(finaliza a string)
+    novo->prox = *playlist; //novo nó aponta para o antigo primeiro
+    novo->ante = NULL; //não tem valor anterior
+    if (*playlist != NULL){
+        (*playlist)->ante = novo; //caso a cabeça seja diferente de NULL o ante(agora a antiga cabeça) aponta para o novo
+    }
+    *playlist = novo; //cabeça vira novo valor
+    printf("Música adicionada!\n");
+    printf("Pressione Enter para continuar!\n");
+    getchar(); //limpa o buffer
+}
+
+void inserir_final(struct Musica **playlist, struct Musica **atual){
+    struct Musica *aux, *novo = malloc(sizeof(struct Musica));
+    if(novo == NULL){
+        printf("Erro de alocação!\n");
+        printf("Pressione Enter para continuar\n");
+        getchar(); getchar();
+        return;
+    }
+    printf("Digite o nome da música: \n");
+    getchar();
+    fgets(novo->nome, 100, stdin);
+    novo->nome[strcspn(novo->nome, "\n")] = '\0';
+    novo->prox = NULL;
+    *atual = novo;
+    if(*playlist == NULL){
+        *playlist = novo;
+        novo->ante = NULL;
+    }
+    else {
+        aux = *playlist; //aux recebe a cabeça da lista
+        while(aux->prox != NULL){ //percorre até o ultimo
+            aux = aux->prox; 
+        }
+        aux->prox = novo; //ultimo valor vira o novo
+        novo->ante = aux; //antigo ultimo valor vira o penúltimo
+    }
+    printf("Música adicionada!\n");
+    printf("Pressione Enter para continuar!\n");
+    getchar(); 
+}
+
+void remover_inicio(struct Musica **playlist){
+    struct Musica *remover;
+    if (*playlist == NULL){
+        printf("Playlist vazia!\n");
+        printf("Pressione Enter para continuar!\n");
+        getchar(); getchar();
+        return;
+    }
+    remover = *playlist;
+    *playlist = remover->prox;
+    if (*playlist != NULL){
+        (*playlist)->ante = NULL;
+    }
+    free(remover);
+    printf("Primeira música removida!\n");
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
+
+void remover_atual(struct Musica **atual, struct Musica **playlist){
+    struct Musica *remover;
+    if (*atual == NULL){
+        printf("Playlist vazia!\n");
+        printf("Pressione Enter para continuar\n");
+        getchar(); getchar();
+        return;
+    }
+    else {
+        remover = *atual;
+        if (remover->ante != NULL){
+            remover->ante->prox = remover->prox;
+        }
+        else{
+            *playlist = remover->prox;
+        }
+        if (remover->prox != NULL){
+            remover->prox->ante = remover->ante;
+        }
+        if (remover->prox != NULL){
+            *atual = remover->prox;
+        }
+        else{
+            *atual = remover->ante;
+        }
+        free(remover);
+        printf("Música removida!\n");
+    }
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
+
+void remover_final(struct Musica **playlist){
+    struct Musica *aux, *remover;
+    if (*playlist == NULL) {
+        printf("Playlist vazia!\n");
+        printf("Pressione Enter para continuar\n");
+        getchar(); getchar();
+        return;
+    }
+    if((*playlist)->prox == NULL){
+        free(*playlist);
+        *playlist = NULL;
+        printf("Úlima música removida!\n");    
+        printf("Pressione Enter para continuar\n");
+        getchar(); getchar();
+        return;
+    } else {
+        aux = *playlist;
+        while (aux->prox->prox != NULL){ //vai ate o penúltimo valor
+            aux = aux->prox;
+        }
+    }
+    remover = aux->prox;
+    aux->prox = NULL; //penúltimo valor virou o ultimo
+    free(remover);
+    printf("Úlima música removida!\n");    
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
+
+struct Musica* buscar(struct Musica **playlist){
+    struct Musica *aux;
+    aux = *playlist;
+    if(*playlist == NULL){
+        printf("Playlist vazia!\n");
+        printf("Pressione Enter para continuar\n");
+        getchar(); getchar();
+        return NULL;
+    }
+    char nome[100];
+    printf("Digite o nome da música que quer buscar:\n");
+    getchar();
+    fgets(nome, 100, stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+    while(aux != NULL){
+        if(strcmp(aux->nome, nome) == 0){ //compara 2 strings caractere por caractere, se for igual retorna 0
+            printf("Essa música existe na playlist!\n");
+            printf("Pressione Enter para continuar\n");
+            getchar();
+            return aux;
+        }
+        aux = aux->prox;
+    }
+
+    printf("Essa música não existe na playlist!\n");
+    printf("Pressione Enter para continuar\n");
+    getchar();
+    return NULL;
+}
+
+void passar_musica(struct Musica **atual){
+    if(*atual == NULL){
+        printf("Playlist vazia!\n");
+    }
+    else if((*atual)->prox == NULL){
+        printf("Você já está na última música da playlist!\n");
+    }
+    else {
+        *atual = (*atual)->prox;
+        printf("Música atual: %s\n", (*atual)->nome);
+    }   
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
+
+void tocar_musica(struct Musica **atual) {
+    struct Musica *musica_atual = *atual;
+    while (musica_atual != NULL) {
+        printf("\n=========================================\n");
+        printf("Tocando agora: %s \n", musica_atual->nome);
+        printf("\n[<<]    [||]    [>>]\n");
+        printf("=========================================\n");
+        int duracao = 10; // 10 segundos
+        char *simbolo[] = {"♬  ", " ♪ ", "  ♬", " ♪ "};
+        int num_simbolos = 4;
+
+        for (int i = 1; i <= duracao; i++) {
+            printf("\r%s  [00:%d / 00:%d] %s", simbolo[i % num_simbolos], i, duracao, simbolo[ i % num_simbolos]);
+            fflush(stdout); //atualiza o terminal imediatamente
+            sleep(1); //espera 1s entre os simbolos
+        }
+        printf("\nMúsica terminou!\n");
+        if (musica_atual->prox != NULL) {
+            musica_atual = musica_atual->prox;
+            printf("Iniciando próxima música: %s\n", musica_atual->nome);
+            sleep(1);
+        } else {
+            printf("Fim da playlist.\n");
+            break;
+        }
+    }
+    *atual = musica_atual; // atualiza o ponteiro para que a música atual seja aonde o player parou
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
+
+void voltar_musica(struct Musica **atual){
+    if(*atual == NULL){
+        printf("Playlist vazia!\n"); 
+    }
+    else if((*atual)->ante == NULL){
+        printf("Você já está na primeira música da playlist!\n");
+    }
+
+    else {
+        *atual = (*atual)->ante;
+        printf("Música atual: %s\n", (*atual)->nome);
+    }
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
+
+void imprimir(struct Musica *playlist){
+    struct Musica *aux = playlist;
+    printf("NULL <--> "); //inicio
+    while (aux != NULL){
+        printf("%s <--> ", aux->nome);
+        aux = aux->prox;
+    }
+    printf("NULL\n"); //final
+    printf("Pressione Enter para continuar\n");
+    getchar(); getchar();
+}
